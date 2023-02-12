@@ -6,6 +6,7 @@ const app = express();
 const { sequelize } = require("./models");
 const session = require("express-session");
 const passport = require("passport");
+const passportConfig = require("./passport");
 const ExpressError = require("./utils/ExpressError");
 
 const UserRouter = require("./routers/users");
@@ -27,7 +28,8 @@ app.use(session(sessionCongif));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/users", UserRouter);
+app.use("/auth", UserRouter);
+passportConfig(); // 패스포트 설정
 
 // 잘못된 주소로 요청이 들어올 경우
 app.all("*", (req, res, next) => {
