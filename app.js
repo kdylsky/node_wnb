@@ -1,13 +1,31 @@
+require("dotenv").config();
+const env = process.env;
+
 const express = require("express");
-const { sequelize } = require("./models");
 const app = express();
+const { sequelize } = require("./models");
+const session = require("express-session");
+const passport = require("passport");
 const ExpressError = require("./utils/ExpressError");
 
 const UserRouter = require("./routers/users");
 
-app.listen(3000, () => {
-  console.log("Server Starting");
-});
+// 세션설정 세팅하기
+const sessionCongif = {
+  secret: env.SESSION_SECRET_KEY,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+app.use(session(sessionCongif));
+
+// passport 초기화 및 세션 이용
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/users", UserRouter);
 
@@ -23,6 +41,10 @@ app.use((error, req, res, next) => {
     error.message = "Default Error Message";
   }
   res.status(status).json({ name: error.name, message: error.message });
+});
+
+app.listen(3000, () => {
+  console.log("Server Starting");
 });
 
 sequelize
