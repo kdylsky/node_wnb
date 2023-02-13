@@ -1,12 +1,15 @@
+const { UUIDV4 } = require("sequelize");
 const Sequelize = require("sequelize");
 
 class User extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        kakaoId: {
+        snsId: {
           type: Sequelize.STRING,
           allowNull: false,
+          primaryKey: true,
+          defaultValue: Sequelize.UUIDV4,
         },
         email: {
           type: Sequelize.STRING,
@@ -23,6 +26,11 @@ class User extends Sequelize.Model {
         point: {
           type: Sequelize.INTEGER,
           defaultValue: 100000,
+        },
+        provider: {
+          type: Sequelize.STRING,
+          primaryKey: true,
+          defaultValue: "local",
         },
       },
       {

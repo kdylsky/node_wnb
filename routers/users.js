@@ -20,4 +20,12 @@ router.get(
 //* 로그아웃 (isLoggedIn 상태일 경우)
 router.get("/logout", isLoggedIn, wrapAsync(users.logout));
 
+router.get(
+  "/test",
+  isLoggedIn,
+  wrapAsync(async (req, res) => {
+    res.send("it work");
+  })
+);
+
 module.exports = router;

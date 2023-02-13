@@ -9,9 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      kakaoId: {
+      snsId: {
         type: Sequelize.STRING,
         allowNull: false,
+        primaryKey: true,
       },
       email: {
         type: Sequelize.STRING,
@@ -28,6 +29,11 @@ module.exports = {
       point: {
         type: Sequelize.INTEGER,
         default: 100000,
+      },
+      provider: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        primaryKey: true,
       },
       createdAt: {
         allowNull: false,
