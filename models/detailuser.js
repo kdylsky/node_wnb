@@ -1,42 +1,30 @@
-const { UUIDV4 } = require("sequelize");
 const Sequelize = require("sequelize");
 
-class User extends Sequelize.Model {
+class DetailUser extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        snsId: {
-          type: Sequelize.STRING,
-          allowNull: false,
-          primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
-        },
-        email: {
+        userDetailId: {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        nickname: {
+        firstName: {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        profileImage: {
+        lastName: {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        point: {
-          type: Sequelize.INTEGER,
-          defaultValue: 100000,
-        },
-        provider: {
+        phoneNumber: {
           type: Sequelize.STRING,
-          // primaryKey: true,
-          defaultValue: "local",
+          allowNull: false,
         },
       },
       {
         sequelize,
-        modelName: "User",
-        tableName: "users",
+        modelName: "DetailUser",
+        tableName: "detailusers",
         timestamps: true,
         underscored: false,
         paranoid: false,
@@ -44,11 +32,11 @@ class User extends Sequelize.Model {
     );
   }
   static associate(db) {
-    User.hasOne(db.DetailUser, {
+    DetailUser.belongsTo(db.User, {
       foreignKey: "userDetailId",
-      sourceKey: "snsId",
+      targetKey: "snsId",
     });
   }
 }
 
-module.exports = User;
+module.exports = DetailUser;
