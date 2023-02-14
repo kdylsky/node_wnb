@@ -9,13 +9,10 @@ module.exports.showHostInfo = async (req, res) => {
 };
 
 module.exports.createHost = async (req, res) => {
-  const { hostImageUrl, hostImageFileName } = req.body;
-  console.log(req.body);
-
-  const host = await Host.create({
-    userId: req.user.snsId,
-    hostImageUrl: hostImageUrl,
-    hostImageFileName: hostImageFileName,
+  console.log(req.file);
+  req.files.map((f) => {
+    console.log(f.filename);
+    console.log(f.path);
   });
   res.status(200).json({ message: "호스트로 등록되었습니다." });
 };
