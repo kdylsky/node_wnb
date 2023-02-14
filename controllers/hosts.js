@@ -1,4 +1,5 @@
 const { Host, User, DetailUser } = require("../models");
+const { HostCloudinary } = require("../cloudinary/hosts");
 
 module.exports.showHostInfo = async (req, res) => {
   const user = req.user;
@@ -28,4 +29,14 @@ module.exports.createHost = async (req, res) => {
     hostImageFileName: req.file.filename,
   });
   return res.status(200).json({ message: "호스트로 등록되었습니다." });
+};
+
+module.exports.updateHostInfo = async (req, res) => {
+  const host = req.currentHost;
+  const currentFileNmae = host.hostImageFileName;
+  host.hostImageUrl = req.file.path;
+  host.hostImageFileName = req.file.filename;
+  await host.save();
+  await HostCloudinary.uploader.destroy(currentFileNmae);
+  return res.status(200).json({ message: "호스트 정보가 수정되었습니다." });
 };

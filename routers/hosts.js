@@ -1,7 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const { isLoggedIn, isHost, alreayHost } = require("../middleware/auths");
+const {
+  isLoggedIn,
+  isHost,
+  alreayHost,
+  authorHost,
+} = require("../middleware/auths");
 const wrapAsync = require("../utils/wrapAsync");
 const hosts = require("../controllers/hosts");
 const { hostStorage } = require("../cloudinary/hosts");
@@ -16,4 +21,13 @@ router.post(
   upload.single("image"),
   wrapAsync(hosts.createHost)
 );
+router.patch(
+  "/:host_id",
+  isLoggedIn,
+  isHost,
+  authorHost,
+  upload.single("image"),
+  wrapAsync(hosts.updateHostInfo)
+);
+
 module.exports = router;

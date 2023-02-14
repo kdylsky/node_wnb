@@ -34,3 +34,16 @@ module.exports.alreayHost = wrapAsync(async (req, res, next) => {
   }
   next();
 });
+
+module.exports.authorHost = wrapAsync(async (req, res, next) => {
+  const { host_id } = req.params;
+  const host = await Host.findByPk(host_id);
+  if (!host) {
+    throw new ExpressError("호스트 정보가 올바르지 않습니다.", 400);
+  }
+  if (host.userId !== req.user.snsId) {
+    throw new ExpressError("[호스트] 권한이 없습니다.", 400);
+  }
+  req.currentHost = host;
+  next();
+});
