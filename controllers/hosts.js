@@ -1,11 +1,24 @@
-const { Host, User } = require("../models");
+const { Host, User, DetailUser } = require("../models");
 
 module.exports.showHostInfo = async (req, res) => {
   const user = req.user;
   const host = await Host.findOne({
     where: { userId: user.snsId },
+    attributes: { exclude: ["hostImageFileName", "createdAt", "updatedAt"] },
+    include: [
+      {
+        model: User,
+        attributes: ["email", "nickname"],
+        include: [
+          {
+            model: DetailUser,
+            attributes: ["firstName", "lastName", "phoneNumber"],
+          },
+        ],
+      },
+    ],
   });
-  res.status(200).json(host);
+  return res.status(200).json(host);
 };
 
 module.exports.createHost = async (req, res) => {
@@ -14,5 +27,5 @@ module.exports.createHost = async (req, res) => {
     hostImageUrl: req.file.path,
     hostImageFileName: req.file.filename,
   });
-  res.status(200).json({ message: "호스트로 등록되었습니다." });
+  return res.status(200).json({ message: "호스트로 등록되었습니다." });
 };
