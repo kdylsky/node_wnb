@@ -3,6 +3,8 @@ const router = express.Router();
 const passport = require("passport");
 const wrapAsync = require("../utils/wrapAsync");
 const { isLoggedIn, isNotLoggedIn } = require("../middleware/auths");
+const { patchUserValidation } = require("../middleware/joiMiddleware");
+
 const users = require("../controllers/users");
 
 // 요청을 보내면, 카카오 로그인 페이지로 가게 되고, 로그인이 하게되면 카카오에서 콜백url설정한 곳으로 리다리렉트 한다.
@@ -19,6 +21,13 @@ router.get(
 
 //* 로그아웃 (isLoggedIn 상태일 경우)
 router.get("/logout", isLoggedIn, wrapAsync(users.logout));
+
+router.patch(
+  "/",
+  isLoggedIn,
+  patchUserValidation,
+  wrapAsync(users.addUserDetail)
+);
 
 router.get(
   "/test",

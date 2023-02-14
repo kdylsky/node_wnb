@@ -11,7 +11,9 @@ const ExpressError = require("./utils/ExpressError");
 
 const UserRouter = require("./routers/users");
 
-passportConfig(); // 패스포트 설정
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // 세션설정 세팅하기
 const sessionCongif = {
   secret: env.SESSION_SECRET_KEY,
@@ -28,6 +30,8 @@ app.use(session(sessionCongif));
 // passport 초기화 및 세션 이용
 app.use(passport.initialize());
 app.use(passport.session());
+
+passportConfig(); // 패스포트 설정
 
 app.use("/auth", UserRouter);
 

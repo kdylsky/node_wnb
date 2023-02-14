@@ -29,7 +29,7 @@ class User extends Sequelize.Model {
         },
         provider: {
           type: Sequelize.STRING,
-          // primaryKey: true,
+          primaryKey: true,
           defaultValue: "local",
         },
       },
