@@ -3,6 +3,7 @@ const env = process.env;
 
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 const { sequelize } = require("./models");
 const session = require("express-session");
 const passport = require("passport");
@@ -12,8 +13,8 @@ const ExpressError = require("./utils/ExpressError");
 const UserRouter = require("./routers/users");
 const HostRouter = require("./routers/hosts");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // 세션설정 세팅하기
 const sessionCongif = {
