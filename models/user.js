@@ -48,6 +48,10 @@ class User extends Sequelize.Model {
       foreignKey: "userDetailId",
       sourceKey: "snsId",
     });
+    User.hasOne(db.Host, {
+      foreignKey: "userId",
+      sourceKey: "snsId",
+    });
   }
 }
 
