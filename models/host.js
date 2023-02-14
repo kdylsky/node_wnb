@@ -11,6 +11,10 @@ class Host extends Sequelize.Model {
         hostImageUrl: {
           type: Sequelize.STRING,
           allowNull: false,
+          get() {
+            const currentImage = this.getDataValue("hostImageUrl");
+            return currentImage.replace("/upload", "/upload/w_500");
+          },
         },
         hostImageFileName: {
           type: Sequelize.STRING,
