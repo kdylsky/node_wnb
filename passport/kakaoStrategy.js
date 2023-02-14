@@ -22,7 +22,6 @@ module.exports = () => {
               profileImage: profile._json.properties.thumbnail_image,
             },
           });
-          console.log(isCreated);
           if (!isCreated) {
             user.setDataValue("nickname", profile._json.properties.nickname);
             user.setDataValue(

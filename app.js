@@ -10,6 +10,7 @@ const passportConfig = require("./passport");
 const ExpressError = require("./utils/ExpressError");
 
 const UserRouter = require("./routers/users");
+const HostRouter = require("./routers/hosts");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -34,6 +35,7 @@ app.use(passport.session());
 passportConfig(); // 패스포트 설정
 
 app.use("/auth", UserRouter);
+app.use("/hosts", HostRouter);
 
 // 잘못된 주소로 요청이 들어올 경우
 app.all("*", (req, res, next) => {

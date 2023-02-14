@@ -18,10 +18,6 @@ router.get(
   // kakaoStrategy에서 성공한다면 콜백 실행
   wrapAsync(users.kakaoLogin)
 );
-
-//* 로그아웃 (isLoggedIn 상태일 경우)
-router.get("/logout", isLoggedIn, wrapAsync(users.logout));
-
 router.patch(
   "/",
   isLoggedIn,
@@ -29,12 +25,6 @@ router.patch(
   wrapAsync(users.addUserDetail)
 );
 
-router.get(
-  "/test",
-  isLoggedIn,
-  wrapAsync(async (req, res) => {
-    res.send("it work");
-  })
-);
+router.get("/logout", isLoggedIn, wrapAsync(users.logout));
 
 module.exports = router;
