@@ -33,6 +33,7 @@ class Host extends Sequelize.Model {
   }
   static associate(db) {
     Host.belongsTo(db.User, { foreignKey: "userId", targetKey: "snsId" });
+    Host.hasMany(db.Room, { foreignKey: "hostId", sourceKey: "id" });
   }
 }
 

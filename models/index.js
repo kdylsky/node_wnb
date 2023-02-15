@@ -4,6 +4,13 @@ const Sequelize = require("sequelize");
 const User = require("./user");
 const DetailUser = require("./detailuser");
 const Host = require("./host");
+const Category = require("./category");
+const Room = require("./room");
+const Facility = require("./facility");
+const DetailRoom = require("./detailroom");
+const RoomImage = require("./roomimage");
+const Country = require("./country");
+const Address = require("./address");
 
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.js")[env];
@@ -25,13 +32,36 @@ db.sequelize = sequelize;
 db.User = User;
 db.DetailUser = DetailUser;
 db.Host = Host;
+db.Category = Category;
+db.Room = Room;
+db.Facility = Facility;
+db.DetailRoom = DetailRoom;
+db.RoomImage = RoomImage;
+db.Country = Country;
+db.Address = Address;
 // 모델과 테이블 종합적인 연결이 설정된다.
 User.init(sequelize);
 DetailUser.init(sequelize);
 Host.init(sequelize);
+Category.init(sequelize);
+Room.init(sequelize);
+Facility.init(sequelize);
+DetailRoom.init(sequelize);
+RoomImage.init(sequelize);
+Country.init(sequelize);
+Address.init(sequelize);
+
 // db객체 안에 있는 모델들 간의 관계가 설정된다.
 User.associate(db);
 DetailUser.associate(db);
 Host.associate(db);
+Category.assoicate(db);
+Room.associate(db);
+Facility.associate(db);
+DetailRoom.associate(db);
+RoomImage.associate(db);
+Country.associate(db);
+Address.associate(db);
+
 // 모듈로 꺼낸다.
 module.exports = db;
