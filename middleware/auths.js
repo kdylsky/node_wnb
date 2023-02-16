@@ -1,6 +1,6 @@
 const ExpressError = require("../utils/ExpressError");
 const wrapAsync = require("../utils/wrapAsync");
-const { Host } = require("../models");
+const { Host, Room } = require("../models");
 
 module.exports.isLoggedIn = (req, res, next) => {
   // isAuthenticated()로 로그인이 되었는지 아닌지를 확인
@@ -45,5 +45,18 @@ module.exports.authorHost = wrapAsync(async (req, res, next) => {
     throw new ExpressError("[호스트] 권한이 없습니다.", 400);
   }
   req.currentHost = host;
+  next();
+});
+
+module.exports.authorRoom = wrapAsync(async (req, res, next) => {
+  const { room_id } = req.params;
+  const room = await Room.findByPk(room_id);
+  if (!room) {
+    throw ExpressError("[호스트-방]방 정보가 올바르지 않습니다.", 400);
+  }
+  if (room.hostId !== currentHost.userId) {
+    throw new ExpressError("[호스트-방] 권한이 없습니다.", 400);
+  }
+  req.currentRoom = room;
   next();
 });

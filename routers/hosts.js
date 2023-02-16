@@ -6,6 +6,7 @@ const {
   isHost,
   alreayHost,
   authorHost,
+  authorRoom,
 } = require("../middleware/auths");
 const wrapAsync = require("../utils/wrapAsync");
 const hosts = require("../controllers/hosts");
@@ -38,3 +39,13 @@ router.get(
   wrapAsync(hosts.showHostRooms)
 );
 module.exports = router;
+
+router.post("/:host_id/rooms", isLoggedIn, isHost, wrapAsync(hosts.createRoom));
+router.post(
+  "/:host_id/rooms/:room_id/address",
+  isLoggedIn,
+  isHost,
+  authorHost,
+  authorRoom,
+  wrapAsync(hosts.addRoomAddress)
+);

@@ -1,4 +1,13 @@
-const { Host, User, DetailUser, Room } = require("../models");
+const {
+  Host,
+  User,
+  DetailUser,
+  Room,
+  Category,
+  DetailRoom,
+  Country,
+  Address,
+} = require("../models");
 const { HostCloudinary } = require("../cloudinary/hosts");
 
 module.exports.showHostInfo = async (req, res) => {
@@ -46,4 +55,58 @@ module.exports.showHostRooms = async (req, res) => {
     where: { hostId: req.currentHost.userId },
   });
   return res.status(200).json(rooms);
+};
+
+// 방에 새로운 필드를 추가해서 created를 넣어서 모든 정보를 입력해야지 완전히 등록할 수 있다.
+// 1.카테고리 방과 상세방 정보를 먼저 등록한다.
+// 2.방 주소를 등록한다.
+// 3.방의 편의시설을 등록한다.
+// 4.방의 이미지를 등록한다.
+module.exports.createRoom = async (req, res) => {
+  const { categoryName, roomName, price, description } = req.body.room;
+  const category = await Category.findOne({ categoryName: categoryName });
+  const room = await Room.create({
+    hostId: req.currentHost.userId,
+    categoryId: category.id,
+    roomName: roomName,
+    price: price,
+    description: description,
+  });
+  const { bedroom, bathroom, capacity } = req.body.detailroom;
+  const detailroom = await DetailRoom.create({
+    roomId: room.id,
+    bedroom: bedroom,
+    bathroom: bathroom,
+    capacity: capacity,
+  });
+  return res.status(200).json({
+    message: "임시로 방이 생성되었습니다. 주소와 옵션과 이미지를 추가해주세요",
+  });
+};
+
+module.exports.addRoomAddress = async (req, res) => {
+  const room = req.currentRoom;
+  const {
+    countryName,
+    streetNumber,
+    addressLine1,
+    addressLine2,
+    city,
+    region,
+    geometry,
+  } = req.body;
+  const country = await Country.findOne({ countryName: countryName });
+  const address = await Address.create({
+    roomId: room.id,
+    countryId: country.id,
+    streetNumber: streetNumber,
+    addressLine1: addressLine1,
+    addressLine2: addressLine2,
+    city: city,
+    region: region,
+    geometry: geometry,
+  });
+  res
+    .status(200)
+    .json({ message: "방에 주소를 추가하였습니다. 옵션을 선택해주세요" });
 };
