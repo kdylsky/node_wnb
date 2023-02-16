@@ -1,4 +1,4 @@
-const { Host, User, DetailUser } = require("../models");
+const { Host, User, DetailUser, Room } = require("../models");
 const { HostCloudinary } = require("../cloudinary/hosts");
 
 module.exports.showHostInfo = async (req, res) => {
@@ -39,4 +39,11 @@ module.exports.updateHostInfo = async (req, res) => {
   await host.save();
   await HostCloudinary.uploader.destroy(currentFileNmae);
   return res.status(200).json({ message: "호스트 정보가 수정되었습니다." });
+};
+
+module.exports.showHostRooms = async (req, res) => {
+  const rooms = await Room.findAll({
+    where: { hostId: req.currentHost.userId },
+  });
+  return res.status(200).json(rooms);
 };

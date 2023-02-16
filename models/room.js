@@ -24,6 +24,11 @@ class Room extends Sequelize.Model {
           type: Sequelize.STRING,
           allowNull: false,
         },
+        isCreatedAll: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+          defaultValue: false,
+        },
       },
       {
         sequelize,

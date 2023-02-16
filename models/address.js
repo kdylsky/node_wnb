@@ -33,7 +33,7 @@ class Address extends Sequelize.Model {
           allowNull: false,
         },
         geometry: {
-          type: Sequelize.GEOMETRY,
+          type: Sequelize.GEOMETRY("POINT", 4326),
           allowNull: false,
         },
       },

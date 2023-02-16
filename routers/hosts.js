@@ -30,4 +30,11 @@ router.patch(
   wrapAsync(hosts.updateHostInfo)
 );
 
+router.get(
+  "/:host_id/rooms",
+  isLoggedIn,
+  isHost,
+  authorHost,
+  wrapAsync(hosts.showHostRooms)
+);
 module.exports = router;
