@@ -21,7 +21,10 @@ const multer = require("multer");
 const uploadHost = multer({ storage: hostStorage });
 const uploadRoom = multer({ storage: roomStorage });
 
+// 호스트로 등록했다면 등록된 호스트 정보 보기
 router.get("/", isLoggedIn, isHost, wrapAsync(hosts.showHostInfo));
+
+// 호스트로 등록이 않되었다면 호스트로 등록하기
 router.post(
   "/",
   isLoggedIn,
@@ -29,6 +32,8 @@ router.post(
   uploadHost.single("image"),
   wrapAsync(hosts.createHost)
 );
+
+// 호스트 등록 후 이미지 변경
 router.patch(
   "/:host_id",
   isLoggedIn,
@@ -38,6 +43,7 @@ router.patch(
   wrapAsync(hosts.updateHostInfo)
 );
 
+// 호스트가 가지고 있는 모든 숙소 출력하기
 router.get(
   "/:host_id/rooms",
   isLoggedIn,
@@ -45,8 +51,8 @@ router.get(
   authorHost,
   wrapAsync(hosts.showHostRooms)
 );
-module.exports = router;
 
+// 호스트 숙소 등록하기
 router.post(
   "/:host_id/rooms",
   isLoggedIn,
@@ -55,6 +61,18 @@ router.post(
   createRoomValidation,
   wrapAsync(hosts.createRoom)
 );
+
+// 호스트의 특정 숙소 출력하기
+router.get(
+  "/:host_id/rooms/:room_id",
+  isLoggedIn,
+  isHost,
+  authorHost,
+  authorRoom,
+  wrapAsync(hosts.retriveHostRoom)
+);
+
+// 등록된 방에 주소 추가하기
 router.post(
   "/:host_id/rooms/:room_id/address",
   isLoggedIn,
@@ -65,6 +83,7 @@ router.post(
   wrapAsync(hosts.addRoomAddress)
 );
 
+// 등록된 방에 편의시설 추가하기
 router.post(
   "/:host_id/rooms/:room_id/facility",
   isLoggedIn,
@@ -75,6 +94,7 @@ router.post(
   wrapAsync(hosts.addRoomFacilityOption)
 );
 
+// 등록된 방에 이미지 추가하기
 router.post(
   "/:host_id/rooms/:room_id/images",
   isLoggedIn,
@@ -84,3 +104,5 @@ router.post(
   uploadRoom.array("rooms"),
   wrapAsync(hosts.addRoomImage)
 );
+
+module.exports = router;

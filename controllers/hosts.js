@@ -69,6 +69,20 @@ module.exports.showHostRooms = async (req, res) => {
   return res.status(200).json(rooms);
 };
 
+module.exports.retriveHostRoom = async (req, res) => {
+  const room = req.currentRoom;
+  const address = await room.getAddress();
+  const images = await room.getRoomImages();
+  const faciliteis = await room.getFacilities();
+  const roomInfo = {
+    room: room,
+    address: address,
+    images: images,
+    facilities: faciliteis,
+  };
+  return res.status(200).json(roomInfo);
+};
+
 // 방에 새로운 필드를 추가해서 created를 넣어서 모든 정보를 입력해야지 완전히 등록할 수 있다.
 // 1.카테고리 방과 상세방 정보를 먼저 등록한다.
 // 2.방 주소를 등록한다.

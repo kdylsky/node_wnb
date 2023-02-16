@@ -52,7 +52,7 @@ module.exports.authorRoom = wrapAsync(async (req, res, next) => {
   const { room_id } = req.params;
   const room = await Room.findByPk(room_id);
   if (!room) {
-    throw ExpressError("[호스트-방]방 정보가 올바르지 않습니다.", 400);
+    throw new ExpressError("[호스트-방]방 정보가 올바르지 않습니다.", 400);
   }
   if (room.hostId !== req.currentHost.id) {
     throw new ExpressError("[호스트-방] 권한이 없습니다.", 400);
