@@ -61,3 +61,12 @@ router.post(
   addRoomAddressValidation,
   wrapAsync(hosts.addRoomAddress)
 );
+
+router.post(
+  "/:host_id/rooms/:room_id/facility",
+  // isLoggedIn,
+  // isHost,
+  // authorHost,
+  // authorRoom,
+  wrapAsync(hosts.addRoomFacilityOption)
+);

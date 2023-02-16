@@ -14,14 +14,17 @@ module.exports.logout = async (req, res, next) => {
 
 module.exports.addUserDetail = async (req, res) => {
   const { firstName, lastName, phoneNumber } = req.body;
+  console.log(req.body);
+  console.log(req.user);
   const [updateUser, isCreated] = await DetailUser.findOrCreate({
     where: { userDetailId: req.user.snsId },
-    default: {
-      firstName,
-      lastName,
-      phoneNumber,
+    defaults: {
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
     },
   });
+  console.log(isCreated);
   if (!isCreated) {
     updateUser.phoneNumber = phoneNumber;
   }

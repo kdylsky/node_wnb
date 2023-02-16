@@ -7,6 +7,7 @@ class Address extends Sequelize.Model {
         roomId: {
           type: Sequelize.INTEGER,
           allowNull: false,
+          primaryKey: true,
         },
         countryId: {
           type: Sequelize.INTEGER,

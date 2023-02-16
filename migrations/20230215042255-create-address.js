@@ -12,6 +12,7 @@ module.exports = {
       roomId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        primaryKey: true,
         references: {
           model: "rooms",
           key: "id",

@@ -1,4 +1,11 @@
+require("dotenv").config();
+const env = process.env;
+
 const ExpressError = require("../utils/ExpressError");
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+
+const mapBoxToken = env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 
 const {
   Host,
@@ -55,7 +62,7 @@ module.exports.updateHostInfo = async (req, res) => {
 
 module.exports.showHostRooms = async (req, res) => {
   const rooms = await Room.findAll({
-    where: { hostId: req.currentHost.userId },
+    where: { hostId: req.currentHost.id },
   });
   return res.status(200).json(rooms);
 };
@@ -103,9 +110,19 @@ module.exports.addRoomAddress = async (req, res) => {
     addressLine2,
     city,
     region,
-    geometry,
+    // geometry,
   } = req.body;
   const country = await Country.findOne({ countryName: countryName });
+  const query = `${streetNumber},${addressLine2},${addressLine1},${city},${countryName}`;
+  const geoData = await geocoder
+    .forwardGeocode({
+      query: query,
+      limit: 1,
+    })
+    .send();
+
+  const geometry = geoData.body.features[0].geometry;
+
   const address = await Address.create({
     roomId: room.id,
     countryId: country.id,
@@ -119,4 +136,10 @@ module.exports.addRoomAddress = async (req, res) => {
   return res
     .status(200)
     .json({ message: "방에 주소를 추가하였습니다. 옵션을 선택해주세요" });
+};
+
+module.exports.addRoomFacilityOption = async (req, res) => {
+  const address = await Address.findOne();
+  console.log(address.geometry);
+  res.send("it work");
 };

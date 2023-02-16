@@ -30,11 +30,4 @@ module.exports.AddHostRoomAddress = Joi.object({
   addressLine2: Joi.string().not("").optional(),
   city: Joi.string().not("").required(),
   region: Joi.string().not("").optional(),
-  geometry: Joi.object({
-    type: Joi.string().allow("Point").only().required(),
-    coordinates: Joi.array().items(
-      Joi.number().min(-180).max(180).required(),
-      Joi.number().min(0).max(90).required()
-    ),
-  }).required(),
 }).options({ abortEarly: false });
