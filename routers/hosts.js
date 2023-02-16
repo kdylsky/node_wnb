@@ -1,5 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const {
+  createRoomValidation,
+  addRoomAddressValidation,
+} = require("../middleware/joiMiddleware");
 
 const {
   isLoggedIn,
@@ -40,12 +44,20 @@ router.get(
 );
 module.exports = router;
 
-router.post("/:host_id/rooms", isLoggedIn, isHost, wrapAsync(hosts.createRoom));
+router.post(
+  "/:host_id/rooms",
+  isLoggedIn,
+  isHost,
+  authorHost,
+  createRoomValidation,
+  wrapAsync(hosts.createRoom)
+);
 router.post(
   "/:host_id/rooms/:room_id/address",
   isLoggedIn,
   isHost,
   authorHost,
   authorRoom,
+  addRoomAddressValidation,
   wrapAsync(hosts.addRoomAddress)
 );

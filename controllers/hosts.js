@@ -1,3 +1,5 @@
+const ExpressError = require("../utils/ExpressError");
+
 const {
   Host,
   User,
@@ -7,6 +9,7 @@ const {
   DetailRoom,
   Country,
   Address,
+  sequelize,
 } = require("../models");
 const { HostCloudinary } = require("../cloudinary/hosts");
 
@@ -65,23 +68,30 @@ module.exports.showHostRooms = async (req, res) => {
 module.exports.createRoom = async (req, res) => {
   const { categoryName, roomName, price, description } = req.body.room;
   const category = await Category.findOne({ categoryName: categoryName });
-  const room = await Room.create({
-    hostId: req.currentHost.userId,
-    categoryId: category.id,
-    roomName: roomName,
-    price: price,
-    description: description,
-  });
-  const { bedroom, bathroom, capacity } = req.body.detailroom;
-  const detailroom = await DetailRoom.create({
-    roomId: room.id,
-    bedroom: bedroom,
-    bathroom: bathroom,
-    capacity: capacity,
-  });
-  return res.status(200).json({
-    message: "임시로 방이 생성되었습니다. 주소와 옵션과 이미지를 추가해주세요",
-  });
+  try {
+    const result = await sequelize.transaction(async () => {
+      const room = await Room.create({
+        hostId: req.currentHost.id,
+        categoryId: category.id,
+        roomName: roomName,
+        price: price,
+        description: description,
+      });
+      const { bedroom, bathroom, capacity } = req.body.detailroom;
+      const detailroom = await DetailRoom.create({
+        roomId: room.id,
+        bedroom: bedroom,
+        bathroom: bathroom,
+        capacity: capacity,
+      });
+      return res.status(200).json({
+        message:
+          "임시로 방이 생성되었습니다. 주소와 옵션과 이미지를 추가해주세요",
+      });
+    });
+  } catch (error) {
+    throw new ExpressError(error.message, 400);
+  }
 };
 
 module.exports.addRoomAddress = async (req, res) => {
@@ -106,7 +116,7 @@ module.exports.addRoomAddress = async (req, res) => {
     region: region,
     geometry: geometry,
   });
-  res
+  return res
     .status(200)
     .json({ message: "방에 주소를 추가하였습니다. 옵션을 선택해주세요" });
 };

@@ -10,6 +10,11 @@ const passport = require("passport");
 const passportConfig = require("./passport");
 const ExpressError = require("./utils/ExpressError");
 
+const { Sequelize } = require("sequelize");
+const cls = require("cls-hooked");
+const namespace = cls.createNamespace("transaction-namespace");
+Sequelize.useCLS(namespace);
+
 const UserRouter = require("./routers/users");
 const HostRouter = require("./routers/hosts");
 const RoomRouter = require("./routers/rooms");
