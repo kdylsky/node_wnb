@@ -16,6 +16,7 @@ const {
   DetailRoom,
   Country,
   Address,
+  Facility,
   sequelize,
 } = require("../models");
 const { HostCloudinary } = require("../cloudinary/hosts");
@@ -139,7 +140,16 @@ module.exports.addRoomAddress = async (req, res) => {
 };
 
 module.exports.addRoomFacilityOption = async (req, res) => {
-  const address = await Address.findOne();
-  console.log(address.geometry);
-  res.send("it work");
+  const room = req.currentRoom;
+  for (let facility of req.body.facilityList) {
+    const foundFacility = await Facility.findOne({
+      where: { facilityName: facility },
+    });
+    room.addFacilities(foundFacility);
+  }
+  return res
+    .json(200)
+    .json({
+      message: "방에 편의시설 정보를 추가하였스빈다. 이미지를 추가해주세요",
+    });
 };

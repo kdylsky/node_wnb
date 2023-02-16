@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { countryList, categoryList, faciltyList } = require("./utils/seedData");
 
 module.exports.DetailUserSchema = Joi.object({
   firstName: Joi.string().not("").required(),
@@ -11,7 +12,10 @@ module.exports.DetailUserSchema = Joi.object({
 
 module.exports.CreateHostRoomSchema = Joi.object({
   room: Joi.object({
-    categoryName: Joi.string().not("").required(),
+    categoryName: Joi.string()
+      .allow(...categoryList)
+      .only()
+      .required(),
     roomName: Joi.string().not("").required(),
     price: Joi.number().not("").min(1).required(),
     description: Joi.string().not("").required(),
@@ -24,10 +28,22 @@ module.exports.CreateHostRoomSchema = Joi.object({
 }).options({ abortEarly: false });
 
 module.exports.AddHostRoomAddress = Joi.object({
-  countryName: Joi.string().not("").required(),
+  countryName: Joi.string()
+    .allow(...countryList)
+    .only()
+    .required(),
   streetNumber: Joi.number().min(1).required(),
   addressLine1: Joi.string().not("").required(),
   addressLine2: Joi.string().not("").optional(),
   city: Joi.string().not("").required(),
   region: Joi.string().not("").optional(),
 }).options({ abortEarly: false });
+
+module.exports.AddHostRoomFacility = Joi.object({
+  facilityList: Joi.array().items(
+    Joi.string()
+      .allow(...faciltyList)
+      .only()
+      .required()
+  ),
+});

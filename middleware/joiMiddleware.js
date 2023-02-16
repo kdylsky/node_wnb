@@ -2,6 +2,7 @@ const {
   DetailUserSchema,
   CreateHostRoomSchema,
   AddHostRoomAddress,
+  AddHostRoomFacility,
 } = require("../joiSchemas");
 const ExpressError = require("../utils/ExpressError");
 
@@ -27,6 +28,16 @@ module.exports.createRoomValidation = (req, res, next) => {
 
 module.exports.addRoomAddressValidation = (req, res, next) => {
   const { error } = AddHostRoomAddress.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+module.exports.addRoomFacilityValidation = (req, res, next) => {
+  const { error } = AddHostRoomFacility.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(msg, 400);

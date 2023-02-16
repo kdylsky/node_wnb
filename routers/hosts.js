@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   createRoomValidation,
   addRoomAddressValidation,
+  addRoomFacilityValidation,
 } = require("../middleware/joiMiddleware");
 
 const {
@@ -68,5 +69,6 @@ router.post(
   // isHost,
   // authorHost,
   // authorRoom,
+  addRoomFacilityValidation,
   wrapAsync(hosts.addRoomFacilityOption)
 );
