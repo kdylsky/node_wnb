@@ -16,15 +16,17 @@ const {
 const wrapAsync = require("../utils/wrapAsync");
 const hosts = require("../controllers/hosts");
 const { hostStorage } = require("../cloudinary/hosts");
+const { roomStorage } = require("../cloudinary/rooms");
 const multer = require("multer");
-const upload = multer({ storage: hostStorage });
+const uploadHost = multer({ storage: hostStorage });
+const uploadRoom = multer({ storage: roomStorage });
 
 router.get("/", isLoggedIn, isHost, wrapAsync(hosts.showHostInfo));
 router.post(
   "/",
   isLoggedIn,
   alreayHost,
-  upload.single("image"),
+  uploadHost.single("image"),
   wrapAsync(hosts.createHost)
 );
 router.patch(
@@ -32,7 +34,7 @@ router.patch(
   isLoggedIn,
   isHost,
   authorHost,
-  upload.single("image"),
+  uploadHost.single("image"),
   wrapAsync(hosts.updateHostInfo)
 );
 
@@ -65,10 +67,20 @@ router.post(
 
 router.post(
   "/:host_id/rooms/:room_id/facility",
-  // isLoggedIn,
-  // isHost,
-  // authorHost,
-  // authorRoom,
+  isLoggedIn,
+  isHost,
+  authorHost,
+  authorRoom,
   addRoomFacilityValidation,
   wrapAsync(hosts.addRoomFacilityOption)
+);
+
+router.post(
+  "/:host_id/rooms/:room_id/images",
+  isLoggedIn,
+  isHost,
+  authorHost,
+  authorRoom,
+  uploadRoom.array("rooms"),
+  wrapAsync(hosts.addRoomImage)
 );

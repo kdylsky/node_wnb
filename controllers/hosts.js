@@ -17,6 +17,7 @@ const {
   Country,
   Address,
   Facility,
+  RoomImage,
   sequelize,
 } = require("../models");
 const { HostCloudinary } = require("../cloudinary/hosts");
@@ -147,9 +148,25 @@ module.exports.addRoomFacilityOption = async (req, res) => {
     });
     room.addFacilities(foundFacility);
   }
-  return res
-    .json(200)
-    .json({
-      message: "방에 편의시설 정보를 추가하였스빈다. 이미지를 추가해주세요",
+  return res.status(200).json({
+    message: "방에 편의시설 정보를 추가하였스빈다. 이미지를 추가해주세요",
+  });
+};
+
+module.exports.addRoomImage = async (req, res) => {
+  const images = req.files.map((f) => ({
+    roomImageUrl: f.path,
+    roomImageFileName: f.filename,
+  }));
+
+  for (let image of images) {
+    await RoomImage.create({
+      roomId: req.currentRoom.id,
+      roomImageUrl: image.roomImageUrl,
+      roomImageFileName: image.roomImageFileName,
     });
+  }
+  req.currentRoom.isCreatedAll = true;
+  await req.currentRoom.save();
+  return res.status(200).json({ message: "이미지가 추가 되었습니다." });
 };
