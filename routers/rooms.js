@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync");
 const rooms = require("../controllers/rooms");
-const { isLoggedIn, isHost } = require("../middleware/auths");
+const { existRoom } = require("../middleware/rooms");
 
 router.get("/", wrapAsync(rooms.userShowRoom));
-router.post("/", wrapAsync(rooms.createRoom));
+router.get("/:room_id", existRoom, wrapAsync(rooms.userRetriveRoom));
 module.exports = router;
