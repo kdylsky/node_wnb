@@ -4,6 +4,7 @@ const {
   Category,
   RoomImage,
   Facility,
+  WishList,
 } = require("../models");
 
 const { faciltyList } = require("../utils/seedData");
@@ -69,4 +70,12 @@ module.exports.userShowRoom = async (req, res) => {
 module.exports.userRetriveRoom = async (req, res) => {
   const room = req.currentRetriveRoom;
   res.json(room);
+};
+
+module.exports.userAddWishList = async (req, res) => {
+  const room = req.currentRetriveRoom;
+  const { wishListId } = req.body;
+  const wishList = await WishList.findByPk(wishListId);
+  wishList.addRooms(room);
+  return res.status(200).json({ message: "위시리스트에 방이 추가되었습니다." });
 };
