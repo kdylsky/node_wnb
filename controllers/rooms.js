@@ -5,8 +5,10 @@ const {
   RoomImage,
   Facility,
 } = require("../models");
+
 const { faciltyList } = require("../utils/seedData");
 const { Op } = require("sequelize");
+
 module.exports.userShowRoom = async (req, res) => {
   const {
     categoryName,

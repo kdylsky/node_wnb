@@ -6,4 +6,5 @@ const { existRoom } = require("../middleware/rooms");
 
 router.get("/", wrapAsync(rooms.userShowRoom));
 router.get("/:room_id", existRoom, wrapAsync(rooms.userRetriveRoom));
+
 module.exports = router;

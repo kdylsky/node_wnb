@@ -32,6 +32,7 @@ router.patch(
 router.get("/logout", isLoggedIn, wrapAsync(users.logout));
 
 router.get("/wishlists", isLoggedIn, wrapAsync(users.showWishList));
+router.post("/wishlists", isLoggedIn, wrapAsync(users.createWishList));
 router.get(
   "/wishlists/:wishList_id",
   isLoggedIn,

@@ -81,7 +81,7 @@ module.exports.authorWishList = wrapAsync(async (req, res, next) => {
   if (!wishList) {
     throw new ExpressError("[wishlist] 정보가 없습니다.", 400);
   }
-  if (wishList.useId !== req.user.snsId) {
+  if (wishList.userId !== req.user.snsId) {
     throw new ExpressError("[wishlist] 권한이 없습니다.", 400);
   }
   req.currentWishList = wishList;

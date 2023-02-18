@@ -43,3 +43,14 @@ module.exports.retriveWishList = async (req, res) => {
   const wishlist = req.currentWishList;
   return res.status(200).json(wishlist);
 };
+
+module.exports.createWishList = async (req, res) => {
+  const user = req.user;
+  const wishList = WishList.create({
+    userId: user.snsId,
+    listName: req.body.listName,
+  });
+  return res
+    .status(200)
+    .json({ message: `[${req.body.listName}] 위시 리스트가 생성되었습니다.` });
+};
