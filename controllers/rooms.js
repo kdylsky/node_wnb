@@ -72,10 +72,21 @@ module.exports.userRetriveRoom = async (req, res) => {
   res.json(room);
 };
 
-module.exports.userAddWishList = async (req, res) => {
+module.exports.userCheckWishList = async (req, res) => {
   const room = req.currentRetriveRoom;
   const { wishListId } = req.body;
   const wishList = await WishList.findByPk(wishListId);
-  wishList.addRooms(room);
-  return res.status(200).json({ message: "위시리스트에 방이 추가되었습니다." });
+  const isexisted = await wishList.getRooms({ where: { id: room.id } });
+
+  if (isexisted.length === 0) {
+    wishList.addRooms(room);
+    return res
+      .status(200)
+      .json({ message: "위시리스트에 방이 추가되었습니다." });
+  } else {
+    wishList.removeRooms(room);
+    return res
+      .status(200)
+      .json({ message: "위시리스트에서 방이 삭제되었습니다." });
+  }
 };
