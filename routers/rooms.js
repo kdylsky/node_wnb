@@ -11,6 +11,6 @@ router.post(
   "/:room_id/wishlist",
   isLoggedIn,
   existRoom,
-  wrapAsync(rooms.userAddWishList)
+  wrapAsync(rooms.userCheckWishList)
 );
 module.exports = router;
