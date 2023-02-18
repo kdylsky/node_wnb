@@ -1,4 +1,4 @@
-const { User, DetailUser } = require("../models");
+const { User, DetailUser, WishList, Room } = require("../models");
 
 module.exports.kakaoLogin = async (req, res) => {
   res.status(200).json({ messaga: "로그인에 성공했습니다." });
@@ -30,4 +30,16 @@ module.exports.addUserDetail = async (req, res) => {
   }
   await updateUser.save();
   return res.status(200).json({ messaga: "유저 정보를 업데이트 했습니다." });
+};
+
+module.exports.showWishList = async (req, res) => {
+  const wishLists = await WishList.findAll({
+    userId: req.user.snsId,
+  });
+  return res.status(200).json(wishLists);
+};
+
+module.exports.retriveWishList = async (req, res) => {
+  const wishlist = req.currentWishList;
+  return res.status(200).json(wishlist);
 };

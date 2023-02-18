@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const wrapAsync = require("../utils/wrapAsync");
-const { isLoggedIn, isNotLoggedIn } = require("../middleware/auths");
+const {
+  isLoggedIn,
+  isNotLoggedIn,
+  authorWishList,
+} = require("../middleware/auths");
 const { patchUserValidation } = require("../middleware/joiMiddleware");
 
 const users = require("../controllers/users");
@@ -27,4 +31,11 @@ router.patch(
 
 router.get("/logout", isLoggedIn, wrapAsync(users.logout));
 
+router.get("/wishlists", isLoggedIn, wrapAsync(users.showWishList));
+router.get(
+  "/wishlists/:wishList_id",
+  isLoggedIn,
+  authorWishList,
+  wrapAsync(users.retriveWishList)
+);
 module.exports = router;

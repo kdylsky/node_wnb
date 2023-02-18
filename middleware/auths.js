@@ -1,6 +1,6 @@
 const ExpressError = require("../utils/ExpressError");
 const wrapAsync = require("../utils/wrapAsync");
-const { Host, Room } = require("../models");
+const { Host, Room, WishList, RoomImage, Address } = require("../models");
 
 module.exports.isLoggedIn = (req, res, next) => {
   // isAuthenticated()로 로그인이 되었는지 아닌지를 확인
@@ -58,5 +58,32 @@ module.exports.authorRoom = wrapAsync(async (req, res, next) => {
     throw new ExpressError("[호스트-방] 권한이 없습니다.", 400);
   }
   req.currentRoom = room;
+  next();
+});
+
+module.exports.authorWishList = wrapAsync(async (req, res, next) => {
+  const { wishList_id } = req.params;
+  const wishList = await WishList.findByPk(wishList_id, {
+    include: [
+      {
+        model: Room,
+        include: [
+          {
+            model: RoomImage,
+          },
+          {
+            model: Address,
+          },
+        ],
+      },
+    ],
+  });
+  if (!wishList) {
+    throw new ExpressError("[wishlist] 정보가 없습니다.", 400);
+  }
+  if (wishList.useId !== req.user.snsId) {
+    throw new ExpressError("[wishlist] 권한이 없습니다.", 400);
+  }
+  req.currentWishList = wishList;
   next();
 });
