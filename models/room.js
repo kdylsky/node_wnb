@@ -47,6 +47,12 @@ class Room extends Sequelize.Model {
     Room.hasOne(db.Address, { foreignKey: "roomId", sourceKey: "id" });
     Room.hasMany(db.RoomImage, { foreignKey: "roomId", sourceKey: "id" });
     Room.belongsToMany(db.Facility, { through: "RoomFacility" });
+    Room.belongsToMany(db.WishList, {
+      through: db.WishListRoom,
+      foreignKey: "roomId",
+      sourceKey: "id",
+      targetKey: "id",
+    });
   }
 }
 

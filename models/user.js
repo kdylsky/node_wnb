@@ -52,6 +52,10 @@ class User extends Sequelize.Model {
       foreignKey: "userId",
       sourceKey: "snsId",
     });
+    User.hasMany(db.WishList, {
+      foreignKey: "userId",
+      sourceKey: "snsId",
+    });
   }
 }
 
