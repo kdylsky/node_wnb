@@ -19,7 +19,7 @@ class Category extends Sequelize.Model {
       }
     );
   }
-  static assoicate(db) {
+  static associate(db) {
     Category.hasMany(db.Room, { foreignKey: "categoryId", sourceKey: "id" });
   }
 }

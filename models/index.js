@@ -13,6 +13,8 @@ const Country = require("./country");
 const Address = require("./address");
 const WishList = require("./wishlist");
 const WishListRoom = require("./wishlistroom");
+const UserPayment = require("./userpayment");
+const Reservation = require("./reservation");
 
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.js")[env];
@@ -43,6 +45,8 @@ db.Country = Country;
 db.Address = Address;
 db.WishList = WishList;
 db.WishListRoom = WishListRoom;
+db.UserPayment = UserPayment;
+db.Reservation = Reservation;
 
 // 모델과 테이블 종합적인 연결이 설정된다.
 User.init(sequelize);
@@ -57,12 +61,14 @@ Country.init(sequelize);
 Address.init(sequelize);
 WishList.init(sequelize);
 WishListRoom.init(sequelize);
+UserPayment.init(sequelize);
+Reservation.init(sequelize);
 
 // db객체 안에 있는 모델들 간의 관계가 설정된다.
 User.associate(db);
 DetailUser.associate(db);
 Host.associate(db);
-Category.assoicate(db);
+Category.associate(db);
 Room.associate(db);
 Facility.associate(db);
 DetailRoom.associate(db);
@@ -71,6 +77,8 @@ Country.associate(db);
 Address.associate(db);
 WishList.associate(db);
 WishListRoom.associate(db);
+UserPayment.associate(db);
+Reservation.associate(db);
 
 // 모듈로 꺼낸다.
 module.exports = db;

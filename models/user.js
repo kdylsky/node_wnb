@@ -56,6 +56,14 @@ class User extends Sequelize.Model {
       foreignKey: "userId",
       sourceKey: "snsId",
     });
+    User.hasMany(db.UserPayment, {
+      foreignKey: "userId",
+      sourceKey: "snsId",
+    });
+    User.hasMany(db.Reservation, {
+      foreignKey: "userId",
+      sourceKey: "snsId",
+    });
   }
 }
 
