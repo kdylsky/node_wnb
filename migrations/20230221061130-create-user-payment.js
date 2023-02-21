@@ -17,8 +17,8 @@ module.exports = {
           key: "snsId",
         },
       },
-      caedNumber: {
-        type: Sequelize.INTEGER,
+      cardNumber: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       cvv: {

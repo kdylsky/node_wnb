@@ -7,7 +7,10 @@ const {
   isNotLoggedIn,
   authorWishList,
 } = require("../middleware/auths");
-const { patchUserValidation } = require("../middleware/joiMiddleware");
+const {
+  patchUserValidation,
+  enrollPaymentValidation,
+} = require("../middleware/joiMiddleware");
 
 const users = require("../controllers/users");
 
@@ -39,4 +42,13 @@ router.get(
   authorWishList,
   wrapAsync(users.retriveWishList)
 );
+
+router.get("/payments", isLoggedIn, wrapAsync(users.showPayment));
+router.post(
+  "/payments",
+  isLoggedIn,
+  enrollPaymentValidation,
+  wrapAsync(users.enrollPayment)
+);
+
 module.exports = router;

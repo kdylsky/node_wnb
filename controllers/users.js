@@ -1,4 +1,4 @@
-const { User, DetailUser, WishList, Room } = require("../models");
+const { User, DetailUser, WishList, Room, UserPayment } = require("../models");
 
 module.exports.kakaoLogin = async (req, res) => {
   res.status(200).json({ messaga: "로그인에 성공했습니다." });
@@ -53,4 +53,33 @@ module.exports.createWishList = async (req, res) => {
   return res
     .status(200)
     .json({ message: `[${req.body.listName}] 위시 리스트가 생성되었습니다.` });
+};
+
+module.exports.showPayment = async (req, res) => {
+  const user = req.user;
+  const payments = await UserPayment.findAll({
+    userId: user.snsId,
+  });
+  return res.status(200).json(payments);
+};
+
+module.exports.enrollPayment = async (req, res) => {
+  const user = req.user;
+  const { cardNumber, cvv, expireDay } = req.body;
+  const [payment, isCreated] = await UserPayment.findOrCreate({
+    where: {
+      userId: user.snsId,
+      cardNumber: cardNumber,
+    },
+    defaults: {
+      cvv: cvv,
+      expireDay: expireDay,
+    },
+  });
+  if (!isCreated) {
+    payment.setDataValue("cvv", cvv);
+    payment.setDataValue("expireDay", expireDay);
+  }
+  await payment.save();
+  return res.status(200).json({ message: "payment가 등록되었습니다." });
 };

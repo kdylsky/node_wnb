@@ -8,8 +8,8 @@ class UserPayment extends Sequelize.Model {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        caedNumber: {
-          type: Sequelize.INTEGER,
+        cardNumber: {
+          type: Sequelize.STRING,
           allowNull: false,
         },
         cvv: {
@@ -19,6 +19,13 @@ class UserPayment extends Sequelize.Model {
         expireDay: {
           type: Sequelize.CHAR,
           allowNull: false,
+          set(value) {
+            const date_list = value.split("-");
+            this.setDataValue(
+              "expireDay",
+              `${date_list[1]}/${date_list[0].slice(2, 4)}`
+            );
+          },
         },
       },
       {

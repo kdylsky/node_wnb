@@ -1,8 +1,9 @@
 const {
   DetailUserSchema,
   CreateHostRoomSchema,
-  AddHostRoomAddress,
-  AddHostRoomFacility,
+  AddHostRoomAddressSchema,
+  AddHostRoomFacilitySchema,
+  EnrollPaymentSchema,
 } = require("../joiSchemas");
 const ExpressError = require("../utils/ExpressError");
 
@@ -27,7 +28,7 @@ module.exports.createRoomValidation = (req, res, next) => {
 };
 
 module.exports.addRoomAddressValidation = (req, res, next) => {
-  const { error } = AddHostRoomAddress.validate(req.body);
+  const { error } = AddHostRoomAddressSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(msg, 400);
@@ -37,7 +38,17 @@ module.exports.addRoomAddressValidation = (req, res, next) => {
 };
 
 module.exports.addRoomFacilityValidation = (req, res, next) => {
-  const { error } = AddHostRoomFacility.validate(req.body);
+  const { error } = AddHostRoomFacilitySchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+module.exports.enrollPaymentValidation = (req, res, next) => {
+  const { error } = EnrollPaymentSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(msg, 400);

@@ -27,7 +27,7 @@ module.exports.CreateHostRoomSchema = Joi.object({
   }).required(),
 }).options({ abortEarly: false });
 
-module.exports.AddHostRoomAddress = Joi.object({
+module.exports.AddHostRoomAddressSchema = Joi.object({
   countryName: Joi.string()
     .allow(...countryList)
     .only()
@@ -39,11 +39,17 @@ module.exports.AddHostRoomAddress = Joi.object({
   region: Joi.string().not("").optional(),
 }).options({ abortEarly: false });
 
-module.exports.AddHostRoomFacility = Joi.object({
+module.exports.AddHostRoomFacilitySchema = Joi.object({
   facilityList: Joi.array().items(
     Joi.string()
       .allow(...faciltyList)
       .only()
       .required()
   ),
-});
+}).options({ abortEarly: false });
+
+module.exports.EnrollPaymentSchema = Joi.object({
+  cardNumber: Joi.number().not("").required(),
+  cvv: Joi.number().not("").required(),
+  expireDay: Joi.date().iso().required(),
+}).options({ abortEarly: false });
